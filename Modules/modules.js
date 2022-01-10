@@ -34,10 +34,6 @@ const Color = sequelize.define('color', {
   name: {type: DataTypes.STRING, unique: true, allowNull: true}
 })
 
-const Smell = sequelize.define('smell', {
-  id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, unique: true, allowNull: true}
-})
 
 const Rating = sequelize.define('rating', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -51,7 +47,6 @@ const ProductInfo = sequelize.define('product_info', {
 })
 
 const ProductType = sequelize.define('product_type', {
-  
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
 })
 
@@ -64,14 +59,11 @@ Rating.belongsTo(User)
 Basket.hasMany(BasketProduct)
 BasketProduct.belongsTo(Basket)
 
-Types.hasMany(Product)
-Product.belongsTo(Types)
+Type.hasMany(Product)
+Product.belongsTo(Type)
 
 Product.hasMany(Color)
-Color.belongsTo(Device)
-
-Product.hasMany(Smell)
-Smell.belongsTo(Product)
+Color.belongsTo(Product)
 
 Product.hasMany(Rating)
 Rating.belongsTo(Product)
@@ -82,18 +74,16 @@ ProductInfo.belongsTo(Product)
 Product.hasMany(BasketProduct)
 BasketProduct.belongsTo(Product)
 
-Types.hasMany(Color, Smell, {through: ProductType })
-Color.hasMany(Types, Smell, {through: ProductType })
-Smell.hasMany(Color, Types, {through: ProductType })
+Type.belongsToMany(Color, {through: ProductType })
+Color.belongsToMany(Type, {through: ProductType })
 
 module.exports = {
   User,
   Basket,
   BasketProduct,
   Product,
-  Types,
+  Type,
   Color,
-  Smell,
   Rating,
   ProductType,
   ProductInfo
